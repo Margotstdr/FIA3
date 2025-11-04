@@ -10,6 +10,10 @@
 #include <string.h>
 #include <ctype.h>
 
+//tbaleaux des points pour les 10 premieres positions
+const int POINTS_CLASSEMENT [] = {25, 18, 15, 12, 10, 8, 6, 4, 2, 1};
+const int NB_POINTS = 10;
+
 
 void afficherGrandPrix(GrandPrixz *GPs, int nbGP) {
 
@@ -213,43 +217,147 @@ void supprimerGrandPrix(GrandPrixz **GPs, int *nbGP) {
     } while (!found);
 }
 
+//fonctions utilitaires pour la fonction resultatCourse
 
-void ajouterResultatsCourse(GrandPrixz *GPs, int nbGP, char nom[], Pilotez *pilotes, int nbPilotes) {
+//fonction pour convertir le temps
+long convertirTemps(const char *tempsStr){
+    int h = 0, m = 0, s =0, ms =0;
 
-    for (int i = 0; i < nbGP; i++) {
-        if (strcmp(nom,GPs[i].nomCircuit) == 0) {
+    //en fonction du format rentré on a plusieurs cas
+    //si on rentre le format h:mm:ss.sss
+    if (sscanf(tempsStr, "%d:%d:%d.%d", &h, &m, &s, &ms) == 4) {
+        return (long)h * 3600000L + (long)m * 60000L + (long)s * 1000L + (long)ms;
+    }
+        //si on rentre le format mm:ss.sss (si h est omis)
+    else if (sscanf(tempsStr, "%d:%d.%d", &m, &s, &ms) == 3) {
+        return (long)m * 60000L + (long)s * 1000L + (long)ms;
+    }
+        //si on rentre le format ss.sss (si h et m sont omis)
+    else if (sscanf(tempsStr, "%d.%d", &s, &ms) == 2) {
+        return (long)s * 1000L + (long)ms;
+    }
+    return -1; //si temps invalide
+}
 
-            ResultatsCourse resultats;
+//fonction de tris à bulle pour les temps
+void triABulleResultats(ResultatsCourse *resultats, int nbResultats) {
+    int i, j;
+    ResultatsCourse temp; // Variable temporaire pour l'échange
 
-            for (int k = 0; k < GPs->nombreResultats; k++) {
-
-                int existe = 0;
-
-                do {
-                    printf("Entrez le nom du pilote : ");
-                    scanf("%s", resultats.nomPilote);
-
-                    for (int j = 0; j < nbPilotes; j++) {
-                        if (strcmp(resultats.nomPilote, pilotes[j].nom) == 0) {
-                            strcpy(resultats.prenomPilote, pilotes[j].prenom);
-                            strcpy(resultats.nationalite, pilotes[j].nationalite);
-                            existe = 1;
-                        }
-                    }
-                    if (existe == 0) {
-                        printf("Erreur : ce pilote n’existe pas dans la liste. Réessayez.\n");
-                    }
-                } while (!existe);
-
-                printf("Entrez son temps réalisé (format h:mm:ss.sss) : ");
-                scanf("%s", resultats.tempsRealise);
-
-
-                resultats.position = 0;
-                resultats.pointsObtenus = 0;
-
-                GPs[i].resultats[k] = resultats;
+    for (i = 0; i < nbResultats - 1; i++) {
+        for (j = 0; j < nbResultats - i - 1; j++) {
+            // Comparaison : si le temps courant est plus lent (>), on échange.
+            if (resultats[j].tempsEnMs > resultats[j+1].tempsEnMs) {
+                // Échange des structures complètes
+                temp = resultats[j];
+                resultats[j] = resultats[j+1];
+                resultats[j+1] = temp;
             }
         }
     }
 }
+
+//fonction finale ajouterResultatCourse
+void ajouterResultatsCourse(GrandPrixz *GPs, int nbGP, char nomCircuit[], Pilotez *pilotes, int nbPilotes) {
+
+    GrandPrixz *gp_courant = NULL;
+    char tempsStr[20];
+    long temps_ms;
+
+    // 1. Trouver le Grand Prix par son nom
+    for (int i = 0; i < nbGP; i++) {
+        if (strcmp(nomCircuit, GPs[i].nomCircuit) == 0) {
+            gp_courant = &GPs[i];
+            break;
+        }
+    }
+
+    if (gp_courant == NULL) {
+        printf("Erreur : Grand Prix '%s' non trouvé.\n", nomCircuit);
+        return;
+    }
+    for (int k = 0; k < gp_courant->nombreResultats; k++) {
+
+        ResultatsCourse resultat_temporaire;
+        int existe = 0;
+        int temps_valide = 0;
+
+        // Validation du pilote
+        do {
+            printf("Entrez le NOM de famille du pilote #%d : ", k + 1);
+            if (scanf("%s", resultat_temporaire.nomPilote) != 1) return;
+
+            for (int j = 0; j < nbPilotes; j++) {
+                if (strcmp(resultat_temporaire.nomPilote, pilotes[j].nom) == 0) {
+                    strcpy(resultat_temporaire.prenomPilote, pilotes[j].prenom);
+                    strcpy(resultat_temporaire.nationalite, pilotes[j].nationalite);
+                    existe = 1;
+                    break;
+                }
+            }
+            if (existe == 0) {
+                printf("Erreur : ce pilote n’existe pas dans la liste. Réessayez.\n");
+            }
+        } while (!existe);
+
+        // Validation du temps et conversion en ms
+        do {
+            printf("Entrez son temps (h:mm:ss.sss ou mm:ss.sss) : ");
+            if (scanf("%s", tempsStr) != 1) return;
+
+            temps_ms = convertirTemps(tempsStr);
+
+            if (temps_ms > 0) {
+                resultat_temporaire.tempsEnMs = temps_ms;
+                temps_valide = 1;
+            } else {
+                printf("Erreur : Format de temps invalide (ex: 1:30:15.250). Réessayez.\n");
+            }
+        } while (!temps_valide);
+
+        resultat_temporaire.position = 0;
+        resultat_temporaire.pointsObtenus = 0;
+
+        // Stocker le résultat
+        gp_courant->resultats[k] = resultat_temporaire;
+    }
+
+    //on trie enfin les résultats
+    triABulleResultats(gp_courant->resultats, gp_courant->nombreResultats);
+    printf("\nRésultats triés du plus rapide au plus lent (Tri à Bulles).\n");
+
+    // 4. Attribution des points et mise à jour des pilotes
+    printf("\n--- Classement Final et Points Attribués ---\n");
+    printf("Pos | Pilote | Temps (ms) | Points\n");
+    printf("------------------------------------------\n");
+
+    for (int i = 0; i < gp_courant->nombreResultats; i++) {
+
+        int points = 0;
+        gp_courant->resultats[i].position = i + 1;
+
+        // Attribution des points
+        if (i < NB_POINTS) {
+            points = POINTS_CLASSEMENT[i];
+        }
+
+        gp_courant->resultats[i].pointsObtenus = points;
+
+        // Mise à jour des points du Pilote dans le tableau général
+        for (int j = 0; j < nbPilotes; j++) {
+            if (strcmp(gp_courant->resultats[i].nomPilote, pilotes[j].nom) == 0) {
+                pilotes[j].points += points;
+                break;
+            }
+        }
+        // Affichage du classement
+        printf("%3d | %s %s | %10ld | %d\n",
+               gp_courant->resultats[i].position,
+               gp_courant->resultats[i].nomPilote,
+               gp_courant->resultats[i].prenomPilote,
+               gp_courant->resultats[i].tempsEnMs,
+               points);
+    }
+    printf("\nPoints des pilotes mis à jour avec succès.\n");
+}
+
