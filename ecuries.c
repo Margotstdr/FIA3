@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 
 void ajouterEcurie(Ecuriez **ecuries, int *nbEcuries) { //nbEcuries le nombre d'écuries ecuries
@@ -38,29 +39,31 @@ void ajouterEcurie(Ecuriez **ecuries, int *nbEcuries) { //nbEcuries le nombre d'
 
      // Ajout à la fin du tableau de notre nouvelle écurie
      (*ecuries)[*nbEcuries] = nouvelleEcurie;
-    (*nbEcuries)++;
-    printf("Écurie ajoutée avec succès ");
+     (*nbEcuries)++;
+     printf("Écurie ajoutée avec succès ");
 }
 
-void majPointsEcurie(Ecuriez *ecurie) {
-         ecurie->points = ecurie->p1.points + ecurie->p2.points;
+void majPointsEcurie(Ecuriez *ecurie, char nom[], Pilotez *pilotes, int nbPilotes) {
+    for (int i = 0; i < nbPilotes; i++) {
+        if (strcmp(nom, pilotes[i].ecurie) == 0) {
+            ecurie->points += pilotes[i].points;
+        }
+    }
      //dans cette fonction on va simplement copier les valeurs des pilotes 1
      // et 2 puis en faire l'addition !
 }
 
-void supprimerEcurie (Ecuriez **ecuries, int *nbEcuries, int index){
-     if(index <0 || index >= *nbEcuries){
-         printf("Indice écurie invalide\n");
-         return;
-     }
-     //on commence par l'état des pilotes
-     (*ecuries)[index].p1.actif = 0;
-     (*ecuries)[index].p2.actif = 0;
+void supprimerEcurie (Ecuriez **ecuries, int *nbEcuries, char nom[], Pilotez **pilotes, int *nbPilotes){
 
-     //on décale les écuries suivantes en écrasant les données de l'écurie à supprimer
-     for(int i = index; i< *nbEcuries -1; i++){
-         (*ecuries)[i] = (*ecuries)[*nbEcuries+1];
-     }
+    for(int i =0; i<(*nbEcuries);i++) {
+        if (strcmp(nom, (*pilotes)[i].ecurie)==0){
+            supprimerPilote(&(*pilotes), &(*nbPilotes), (*pilotes)[i].nom);
+        }
+        //on décale les écuries suivantes en écrasant les données de l'écurie à supprimer
+        for (int j = i+1; j < *nbEcuries - 1; j++) {
+            (*ecuries)[j] = (*ecuries)[j - 1];
+        }
+    }
 
      //on réduit la taille du tableau --> nbEcuries. Donc il faut "réallouer" un nouvelle espace
      //mémoire plus petit
@@ -74,27 +77,41 @@ void supprimerEcurie (Ecuriez **ecuries, int *nbEcuries, int index){
      }
 }
 
-void afficherEcurie (Ecuriez *ecurie, int *nbEcuries){
+void afficherEcurie (Ecuriez *ecurie, int nbEcuries, Pilotez *pilotes, int nbPilotes, char nom[]){
+
+    char p[2][50];
+    int pts[2];
      //cas de base : s'il n'y a pas de pilotes donc actif=0, alors pas d'écurie
-     if(*nbEcuries ==0){
+     if(nbEcuries ==0){
          printf("Aucune écurie sur la piste.");
      }
-     for(int i =0; i<(*nbEcuries);i++){
-         Ecuriez oneEcurie = ecurie[i];
+     for(int i =0; i<(nbEcuries);i++){
+         if (strcmp(ecurie[i].nom, nom)==0) {
+             Ecuriez oneEcurie = ecurie[i];
 
-         if(oneEcurie.actif ==0){
-             printf("[%d] %s (INACTIVE)\n\n", i + 1, oneEcurie.nom); //on numérote les écuries à partir
-             //de 1 (i+1)
-             continue;
+             for (int j = i+1; j <nbPilotes; j++) {
+                 if (strcmp(ecurie[i].nom, pilotes[j].nom)==0) {
+                     for (int k = 0; k < sizeof(p); k++) {
+                         strcpy(p[k], pilotes[j].nom);
+                         pts[k] = pilotes[j].points;
+                     }
+                 }
+             }
+
+             if(oneEcurie.actif ==0){
+                 printf("[%d] %s (INACTIVE)\n\n", i + 1, oneEcurie.nom); //on numérote les écuries à partir
+                 //de 1 (i+1)
+                 continue;
+             }
+             printf("[%d] Nom : %s\n", i + 1, oneEcurie.nom);
+             printf("    Pays : %s\n",  oneEcurie.pays);
+             printf("    Année de création : %d\n", oneEcurie.anneeCreation);
+             printf("    Directeur : %s\n", oneEcurie.directeur);
+             printf("    Points : %d\n", oneEcurie.points);
+             printf("    Pilote 1 : %s (%d pts)\n", p[0], pts[0]);
+             printf("    Pilote 2 : %s (%d pts)\n", p[1], pts[1]);
+             printf("---------------------------------------\n");
          }
-         printf("[%d] Nom : %s\n", i + 1, oneEcurie.nom);
-         printf("    Pays : %s\n",  oneEcurie.pays);
-         printf("    Année de création : %d\n", oneEcurie.anneeCreation);
-         printf("    Directeur : %s\n", oneEcurie.directeur);
-         printf("    Points : %d\n", oneEcurie.points);
-         printf("    Pilote 1 : %s (%d pts)\n", oneEcurie.p1.nom, oneEcurie.p1.points);
-         printf("    Pilote 2 : %s (%d pts)\n", oneEcurie.p2.nom, oneEcurie.p2.points);
-         printf("---------------------------------------\n");
      }
 }
 

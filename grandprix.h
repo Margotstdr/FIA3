@@ -53,7 +53,6 @@ void ajouterGrandPrix(GrandPrixz **GPs, int *nbGP, Pilotez *pilotes, int nbPilot
 
 void supprimerGrandPrix(GrandPrixz **GPs, int *nbGP);
 void ajouterResultatsCourse(GrandPrixz *GPs, int nbGP, char nom[], Pilotez *pilotes, int nbPilotes);
-void majResultats();
 
 
 

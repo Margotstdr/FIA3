@@ -15,16 +15,14 @@ struct Ecurie{
     int anneeCreation;
     char directeur[50];
     int actif;
-    Pilotez *p1;
-    Pilotez *p2;
 };
 
 typedef struct Ecurie Ecuriez;
 
 void ajouterEcurie(Ecuriez **ecuries, int *nbEcuries);  //nbEcuries le nombre d'écuries ecuries
-void majPointsEcurie(Ecuriez *ecurie);
-void supprimerEcurie (Ecuriez **ecuries, int *nbEcuries, int index);
-void afficherEcurie (Ecuriez *ecurie, int *nbEcuries);
+void majPointsEcurie(Ecuriez *ecurie, char nom[], Pilotez *pilotes, int nbPilotes);
+void supprimerEcurie (Ecuriez **ecuries, int *nbEcuries, char nom[], Pilotez **pilotes, int *nbPilotes);
+void afficherEcurie (Ecuriez *ecurie, int nbEcuries, Pilotez *pilotes, int nbPilotes, char nom[]);
 
 
 #endif //FIA3_ECURIES_H

@@ -128,28 +128,14 @@ void ajouterPilote(Pilotez **pilotes, int *nbPilotes, const Ecuriez *ecurie, int
   } while (!rep);
 }
 
-void supprimerPilote (Pilotez **pilotes, int *nbPilotes) {
+void supprimerPilote (Pilotez **pilotes, int *nbPilotes, char nom[]) {
   int found = 0;
-  char nom[50];
-  char nom_pilote[50];
 
   do {
-    printf("Entrez le nom du pilote à supprimer : ");
-    scanf("%s", nom);
-
-    for (int i = 0; nom[i]; i++) {
-      nom[i] = tolower(nom[i]);
-    }
 
     for (int i = 0; i < *nbPilotes; i++) {
 
-      strcpy(nom_pilote, (*pilotes)[i].nom);
-
-      for (int k = 0; nom_pilote[k]; k++) {
-        nom_pilote[k] = tolower(nom_pilote[k]);
-      }
-
-      if (strcmp(nom, nom_pilote) == 0) {
+      if (strcmp(nom, (*pilotes)[i].nom) == 0) {
 
         for (int j = i+1; j < *nbPilotes - 1; j++) {
           (*pilotes)[j] = (*pilotes)[j - 1];

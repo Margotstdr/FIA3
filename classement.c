@@ -12,7 +12,8 @@
 #include <string.h>
 
 
-void classementCourse(GrandPrixz *grandPrix) {//on donne le classement général d'UNE seule course
+void classementCourse(GrandPrixz *grandPrix, int nbGP, char nom[]) {//on donne le classement général d'UNE seule course
+
     if (grandPrix == NULL || grandPrix->nombreResultats == 0) {//on vérifie bien que la liste de grand Prix n'est pas vide
         printf("Aucun résultat disponible pour ce Grand Prix.\n");
         return;
@@ -42,7 +43,11 @@ void classementCourse(GrandPrixz *grandPrix) {//on donne le classement général
     }
 }
 
-void classementPiloteGP (GrandPrixz *GPs, int nbGrandPrix, Pilotez *pilotes, int nbPilotes) {
+void classementPiloteGP (Pilotez *pilotes, int nbPilotes, char nom[]) {
+
+    for (int i = 0; i < nbPilotes; i++) {
+
+    }
     if (GPs == NULL || pilotes == NULL) return;
 
     // on remet tous les points à 0 avant le calcul des points du pilote
@@ -113,16 +118,3 @@ void classementEcurie(Pilotez *pilotes, int nbPilotes, Ecuriez *ecuries, int nbE
                ecuries[i].points);
     }
 }
-
-
-
-
-
-//*
-//*classement course :
-//switch (GPs[i].resultats->position) {
-  //  case 1:
-  //GPs[i].resultats->pointsObtenus += 25;
-    //    pilotes
-      //case 2:
-        //GPs[i].resultats->pointsObtenus += 10;//

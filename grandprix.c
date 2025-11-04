@@ -244,6 +244,7 @@ void ajouterResultatsCourse(GrandPrixz *GPs, int nbGP, char nom[], Pilotez *pilo
                 printf("Entrez son temps réalisé (format h:mm:ss.sss) : ");
                 scanf("%s", resultats.tempsRealise);
 
+
                 resultats.position = 0;
                 resultats.pointsObtenus = 0;
 

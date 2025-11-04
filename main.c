@@ -24,6 +24,7 @@ int main() {
     int choix = 0;
     int run = 1;
     int retour = 0;
+    char nom[50];
 
     initialiserPilotes(&pilotes, &nbPilotes);
     initialiserGrandPrix(&GPs, &nbGP);
@@ -64,7 +65,9 @@ int main() {
                                 ajouterPilote(&pilotes,&nbPilotes, EC, nbEC);
 
                             case 3:
-                                supprimerPilote(&pilotes, &nbPilotes);
+                                printf("Entrez le nom du pilote à supprimer : ");
+                                scanf("%s", nom);
+                                supprimerPilote(&pilotes, &nbPilotes, nom);
 
                             case 4:
                                 retour = 1;

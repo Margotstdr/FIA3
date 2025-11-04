@@ -32,7 +32,7 @@ typedef struct Pilote Pilotez;
 
 void afficherPilote(Pilotez *pilotes, int nbPilotes);
 void ajouterPilote(Pilotez **pilotes, int *nbPilotes, const Ecuriez *ecurie, int nbEcuries);
-void supprimerPilote(Pilotez **pilotes, int *nbPilotes);
+void supprimerPilote(Pilotez **pilotes, int *nbPilotes, char nom[]);
 void majPoints(Pilotez *pilotes, int nbPilotes, GrandPrixz *GPS, int nbGP, char nom_circuit[]);
 
 
