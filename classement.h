@@ -14,8 +14,8 @@ typedef struct GrandPrix GrandPrixz;
 typedef struct Pilote Pilotez;
 
 
-void classementCourse (GrandPrixz *grandPrix);
-void classementPiloteGP (GrandPrixz *gps, int nbGrandPrix, Pilotez *pilotes, int nbPilotes);
+void classementCourse (GrandPrixz *GPs, int nbGP, char nom[]);
+void classementPilote (Pilotez *pilotes, int nbPilotes);
 void classementEcurie(Pilotez *pilotes, int nbPilotes, Ecuriez *ecuries, int nbEcuries);
 
 #endif //FIA3_CLASSEMENT_H

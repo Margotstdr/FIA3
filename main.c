@@ -11,7 +11,53 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
+#include "classement.h"
+#include "couleurs.h"
+
+// Déclaration anticipée de l'appelant des résultats
+void lancerSaisieResultats(GrandPrixz *GPs, int nbGP, Pilotez *pilotes, int nbPilotes);
+
+
+// **********************************************
+// * Fonction d'aide pour lancer la saisie des résultats *
+// **********************************************
+
+void lancerSaisieResultats(GrandPrixz *GPs, int nbGP, Pilotez *pilotes, int nbPilotes) {
+    char nom_gp_saisi[50];
+    int gp_found = 0;
+
+    if (nbGP == 0) {
+        printf("Aucun Grand Prix n'est enregistré pour saisir des résultats.\n");
+        return;
+    }
+
+    // Logique de recherche du GP avec do-while (votre besoin initial)
+    do {
+        printf("\nEntrez le nom EXACT du Grand Prix pour la saisie des résultats (ou 'annuler') : ");
+        if (scanf("%s", nom_gp_saisi) != 1) return;
+
+        if (strcmp(nom_gp_saisi, "annuler") == 0) return;
+
+        gp_found = 0;
+        for (int i = 0; i < nbGP; i++) {
+            // Ici, vous pourriez vouloir comparer en ignorant la casse (utiliser tolower/strcmp)
+            if (strcmp(nom_gp_saisi, GPs[i].nomCircuit) == 0) {
+                gp_found = 1;
+                break;
+            }
+        }
+
+        if (!gp_found) {
+            printf("Grand Prix '%s' non trouvé. Veuillez réessayer.\n", nom_gp_saisi);
+        }
+    } while (!gp_found);
+
+    // Une fois que le nom est trouvé et validé, on appelle la fonction
+    // C'est ici que l'ancienne fonction ajouterResultatsCourse est appelée avec toute la logique de tri et de points
+    ajouterResultatsCourse(GPs, nbGP, nom_gp_saisi, pilotes, nbPilotes);
+}
 
 int main() {
 
@@ -26,14 +72,11 @@ int main() {
     int run = 1;
     int retour = 0;
     char nom[50];
+    int correct = 0;
 
     initialiserPilotes(&pilotes, &nbPilotes);
     initialiserGrandPrix(&GPs, &nbGP);
-    //afficherPilote(&pilotes, &nbPilotes);
-    //supprimerPilote(&pilotes, &nbPilotes);
-    //afficherPilote(&pilotes, &nbPilotes);
-    //afficherGrandPrix(GPs, nbGP);
-    //ajouterGrandPrix(&GPs, &nbGP);
+    initialiserEcuries(&EC, &nbEC);
 
     // Création d'un menu
     do {
@@ -42,7 +85,8 @@ int main() {
                "2. Gérer les écuries\n"
                "3. Gérer les Grands Prix\n"
                "4. Voir les classements\n"
-               "5. Quitter\n");
+               "5. Ajouter des résultats de course\n"
+               "6. Quitter\n");
         printf("Entrez le numéro qui correspond à ce que vous voulez faire : ");
         scanf("%d", &menu_choisi);
         do {
@@ -88,6 +132,8 @@ int main() {
                         if (retour == 1 || run == 0) break;
                     } while (choix < 1 || choix > 5);
 
+                    if (run == 0) return 0;
+                    if (retour == 1) break;
                     retour = 0;
                     break;
 
@@ -112,7 +158,6 @@ int main() {
                                 break;
 
                             case 3:
-                                int correct = 0;
                                 printf("Entrez le nom de l'écurie à supprimer : ");
                                 scanf("%s", nom);
                                 do {
@@ -142,6 +187,8 @@ int main() {
                         if (retour == 1 || run == 0) break;
                     } while (choix < 1 || choix > 5);
 
+                    if (run == 0) return 0;
+                    if (retour == 1) break;
                     retour = 0;
                     break;
 
@@ -184,6 +231,8 @@ int main() {
                         if (retour == 1 || run == 0) break;
                     } while (choix < 1 || choix > 5);
 
+                    if (run == 0) return 0;
+                    if (retour == 1) break;
                     retour = 0;
                     break;
 
@@ -200,22 +249,36 @@ int main() {
                         switch (choix) {
 
                             case 1:
-                                //classement
+                                printf("Entrez le nom de du Grand Prix dont vous voulez voir le classement : ");
+                                scanf("%s", nom);
+                                do {
+                                    for (int i = 0; i < nbGP; i++) {
+                                        if (strcmp(GPs[i].nomCircuit,nom) == 0) {
+                                            correct = 1;
+                                            classementCourse(GPs, nbGP, nom);
+                                        } else {
+                                            printf("Grand prix non trouvé.");
+                                        }
+                                    }
+                                } while (!correct);
+
                                 break;
 
                             case 2:
-                                //classement
+                                classementPilote(pilotes, nbPilotes);
                                 break;
 
                             case 3:
-                                //classement
+                                classementEcurie(pilotes, nbPilotes, EC, nbEC);
                                 break;
 
                             case 4:
                                 retour = 1;
+                                break;
 
                             case 5:
                                 run = 0;
+                                break;
 
                             default:
                                 printf("Ce choix n'est pas valable.");
@@ -224,22 +287,43 @@ int main() {
                         if (retour == 1 || run == 0) break;
                     } while (choix < 1 || choix > 5);
 
+                    if (run == 0) return 0;
+                    if (retour == 1) break;
                     retour = 0;
                     break;
 
                 case 5:
+                    printf("Entrez le nom de du Grand Prix dont vous voulez ajouter des résultats : ");
+                    scanf("%s", nom);
+                    do {
+                        for (int i = 0; i < nbGP; i++) {
+                            if (strcmp(GPs[i].nomCircuit,nom) == 0) {
+                                correct = 1;
+                                ajouterResultatsCourse(GPs, nbGP, nom, pilotes, nbPilotes);
+                            } else {
+                                printf("Grand prix non trouvé.");
+                            }
+                        }
+                    } while (!correct);
+
+                    break;
+
+
+                case 6:
                     run = 0;
                     break;
 
                 default:
                     printf("Ce choix n'est pas valable.");
                     break;
-                    if (retour == 1 || run == 0) break;
-
-            } while (choix < 1 || choix > 5);
-
-            retour = 0;
-            break;
+            }
+        } while (choix < 1 || choix > 6);
     } while (run == 1 || menu_choisi < 1 || menu_choisi > 5);
+
+    free(pilotes);
+    free(GPs);
+    free(EC);
+
+    return 0;
 
 }

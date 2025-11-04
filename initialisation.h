@@ -10,9 +10,10 @@
 
 typedef struct Pilote Pilotez;
 typedef struct GrandPrix GrandPrixz;
+typedef struct Ecurie Ecuriez;
 
 
-
+void initialiserEcuries(Ecuriez **ecuries, int *nbEcuries);
 void initialiserPilotes(Pilotez **pilotes, int *nbPilotes);
 void initialiserGrandPrix(GrandPrixz **GPs, int *nbGP);
 

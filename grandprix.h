@@ -27,6 +27,7 @@ typedef struct {
     char nationalite[50];
     int position;
     char tempsRealise[20];
+    long tempsEnMs;
     int pointsObtenus;
 } ResultatsCourse;
 
@@ -53,6 +54,11 @@ void ajouterGrandPrix(GrandPrixz **GPs, int *nbGP, Pilotez *pilotes, int nbPilot
 
 void supprimerGrandPrix(GrandPrixz **GPs, int *nbGP);
 void ajouterResultatsCourse(GrandPrixz *GPs, int nbGP, char nom[], Pilotez *pilotes, int nbPilotes);
+
+//fonction utilitaires pour utiliser la fonction finale ajouterResultatCourse
+long convertirTemps (const char *tempsStr);
+void triABulleResultats(ResultatsCourse *resultats, int nbResultats);
+void ajouterResultatsCourse(GrandPrixz *GPs, int nbGP, char nomCircuit[], Pilotez *pilotes, int nbPilotes);
 
 
 

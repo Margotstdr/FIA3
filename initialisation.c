@@ -14,13 +14,26 @@
 
 
 
+void initialiserEcuries(Ecuriez **ecuries, int *nbEcuries) {
+    // Initialisation des écuries
+    Ecuriez initEcuries[5] = {{"Red Bull Racing", "Autriche", 0, 2005, "Christian Horner", 1},
+                         {"Scuderia Ferrari", "Italie", 0, 1950, "Frédéric Vasseur", 1},
+                         {"Mercedes-AMG", "Allemagne", 0, 2010, "Toto Wolff", 1},
+                         {"McLaren Racing", "Royaume-Uni", 0, 1966, "Andrea Stella", 1},
+                         {"Aston Martin","Royaume-Uni", 0, 2021, "Mike Krack", 1} };
+    *nbEcuries = 5;
 
-// Initialisation des écuries
-Ecuriez ecuries[5] = {{"Red Bull Racing", "Autriche", 0, 2005, "Christian Horner", 1},
-                     {"Scuderia Ferrari", "Italie", 0, 1950, "Frédéric Vasseur", 1},
-                     {"Mercedes-AMG", "Allemagne", 0, 2010, "Toto Wolff", 1},
-                     {"McLaren Racing", "Royaume-Uni", 0, 1966, "Andrea Stella", 1},
-                     {"Aston Martin","Royaume-Uni", 0, 2021, "Mike Krack", 1} };
+    *ecuries = malloc(*nbEcuries * sizeof(Ecuriez));
+
+    if (*ecuries == NULL) {
+        printf("Erreur d'allocation mémoire pour les écuries.\n");
+        exit(1);
+    }
+
+    for (int i = 0; i < *nbEcuries; i++) {
+        (*ecuries)[i] = initEcuries[i];
+    }
+}
 
 // Initialisation des pilotes
 void initialiserPilotes(Pilotez **pilotes, int *nbPilotes) {

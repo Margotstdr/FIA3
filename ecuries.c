@@ -4,6 +4,7 @@
 
 #include "ecuries.h"
 #include "pilotes.h"
+#include "couleurs.h"
 
 
 #include <stdio.h>
@@ -40,7 +41,7 @@ void ajouterEcurie(Ecuriez **ecuries, int *nbEcuries) { //nbEcuries le nombre d'
      // Ajout à la fin du tableau de notre nouvelle écurie
      (*ecuries)[*nbEcuries] = nouvelleEcurie;
      (*nbEcuries)++;
-     printf("Écurie ajoutée avec succès ");
+     printf("%sÉcurie ajoutée avec succès : %s%s\n", couleurEcurie(nouvelleEcurie.nom), nouvelleEcurie.nom, RESET);
 }
 
 void majPointsEcurie(Ecuriez *ecurie, char nom[], Pilotez *pilotes, int nbPilotes) {
@@ -102,15 +103,15 @@ void afficherEcurie (Ecuriez *ecurie, int nbEcuries, Pilotez *pilotes, int nbPil
              //de 1 (i+1)
              continue;
          }
+         printf("%s", couleurEcurie(oneEcurie.nom));
          printf("[%d] Nom : %s\n", i + 1, oneEcurie.nom);
-         printf("    Pays : %s\n",  oneEcurie.pays);
+         printf("    Pays : %s\n", oneEcurie.pays);
          printf("    Année de création : %d\n", oneEcurie.anneeCreation);
          printf("    Directeur : %s\n", oneEcurie.directeur);
          printf("    Points : %d\n", oneEcurie.points);
          printf("    Pilote 1 : %s (%d pts)\n", p[0], pts[0]);
          printf("    Pilote 2 : %s (%d pts)\n", p[1], pts[1]);
          printf("---------------------------------------\n");
+         printf("%s", RESET);
      }
  }
-
-

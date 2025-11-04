@@ -2,6 +2,8 @@
 // Created by Margot Studer on 04/11/2025.
 //
 
+#include "couleurs.h"
+
 #include "pilotes.h"
 
 #include "grandprix.h"
@@ -24,6 +26,7 @@ void afficherPilote(Pilotez *pilotes, int nbPilotes) {
   printf("\n======= LISTE DES PILOTES =======\n");
 
   for (int i = 0; i < nbPilotes; i++) {
+    printf("%s", couleurEcurie(pilotes[i].ecurie));
     printf("%d. %s %s :\n", i+1, pilotes[i].nom, pilotes[i].prenom);
     printf("\t\tNationalité : %s \n", pilotes[i].nationalite);
     printf("\t\tEcurie : %s \n", pilotes[i].ecurie);
@@ -37,12 +40,14 @@ void afficherPilote(Pilotez *pilotes, int nbPilotes) {
       printf("\t\tActif : Non\n");
     }
     printf("\n------------------------------\n");
+    printf("%s", RESET);
   }
 
   printf("\n==============================\n\n");
 
 }
 
+// Ajout d'un nouveau pilote
 void ajouterPilote(Pilotez **pilotes, int *nbPilotes, const Ecuriez *ecurie, int nbEcuries) {
 
   char nom_ecurie[50];
@@ -50,6 +55,7 @@ void ajouterPilote(Pilotez **pilotes, int *nbPilotes, const Ecuriez *ecurie, int
   int numero, age;
   char act[10];
 
+  // Incrémentation du nombre de pilotes et réallocation mémoire
   (*nbPilotes)++;
   Pilotez *tmp = realloc(*pilotes, (*nbPilotes) * sizeof(Pilotez));
   if (tmp == NULL) {
@@ -58,6 +64,7 @@ void ajouterPilote(Pilotez **pilotes, int *nbPilotes, const Ecuriez *ecurie, int
   }
   *pilotes = tmp;
 
+  // Saisie du nom, prénom et nationalité du pilote
   printf("Nom du pilote : ");
   scanf("%s", (*pilotes)[*nbPilotes - 1].nom);
 
@@ -67,8 +74,9 @@ void ajouterPilote(Pilotez **pilotes, int *nbPilotes, const Ecuriez *ecurie, int
   printf("Nationalité du pilote : ");
   scanf("%s", (*pilotes)[*nbPilotes - 1].nationalite);
 
-  //void afficher ---------------------------------;
+  afficherEcurie(ecurie, nbEcuries, *pilotes, *nbPilotes);
 
+  // Vérification que l'écurie saisie existe bien
   do {
     printf("Nom de l'écurie du pilote : ");
     scanf("%s", nom_ecurie);
@@ -86,6 +94,7 @@ void ajouterPilote(Pilotez **pilotes, int *nbPilotes, const Ecuriez *ecurie, int
 
   (*pilotes)[*nbPilotes - 1].points = 0;
 
+  // Vérification que le numéro de voiture est unique et valide (entre 1 et 99)
   do {
     printf("Numéro de la voiture du pilote : ");
     scanf("%d", &numero);
@@ -101,6 +110,7 @@ void ajouterPilote(Pilotez **pilotes, int *nbPilotes, const Ecuriez *ecurie, int
     }
   } while (!numero_valide);
 
+  // Vérification que l'âge est compris entre 18 et 50 ans
   do {
     printf("Age du pilote : ");
     scanf("%d", &age);
@@ -111,6 +121,7 @@ void ajouterPilote(Pilotez **pilotes, int *nbPilotes, const Ecuriez *ecurie, int
     }
   } while (age > 50 || age < 18);
 
+  // Demande si le pilote est actif ou non
   do {
     printf("Le Grand Prix est-il actif ?");
     scanf("%s", act);
