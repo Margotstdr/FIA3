@@ -161,3 +161,42 @@ int main() {
     } while (run == 1 || menu_choisi < 1 || menu_choisi > 5);
 
 }
+
+/*
+// Exemple de code DANS votre main()
+// ... (initialisation de vos tableaux GPs et pilotes)
+// ...
+
+void lancerSaisieResultats(GrandPrixz *GPs, int nbGP, Pilotez *pilotes, int nbPilotes) {
+    char nom_gp_saisi[50];
+    int gp_found = 0;
+
+    if (nbGP == 0) {
+        printf("Aucun Grand Prix n'est enregistré pour saisir des résultats.\n");
+        return;
+    }
+
+    // Logique de recherche du GP avec do-while (votre besoin initial)
+    do {
+        printf("\nEntrez le nom EXACT du Grand Prix pour la saisie des résultats : ");
+        if (scanf("%s", nom_gp_saisi) != 1) return;
+
+        gp_found = 0;
+        for (int i = 0; i < nbGP; i++) {
+            if (strcmp(nom_gp_saisi, GPs[i].nomCircuit) == 0) {
+                gp_found = 1;
+                break;
+            }
+        }
+
+        if (!gp_found) {
+            printf("Grand Prix '%s' non trouvé. Veuillez réessayer.\n", nom_gp_saisi);
+        }
+    } while (!gp_found);
+
+    // Une fois que le nom est trouvé et validé, on appelle la fonction
+    ajouterResultatsCourse(GPs, nbGP, nom_gp_saisi, pilotes, nbPilotes);
+}
+
+// ...
+ */
