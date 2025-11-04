@@ -77,7 +77,7 @@ void supprimerEcurie (Ecuriez **ecuries, int *nbEcuries, char nom[], Pilotez **p
      }
 }
 
-void afficherEcurie (Ecuriez *ecurie, int nbEcuries, Pilotez *pilotes, int nbPilotes, char nom[]){
+void afficherEcurie (Ecuriez *ecurie, int nbEcuries, Pilotez *pilotes, int nbPilotes){
 
     char p[2][50];
     int pts[2];
@@ -85,33 +85,32 @@ void afficherEcurie (Ecuriez *ecurie, int nbEcuries, Pilotez *pilotes, int nbPil
      if(nbEcuries ==0){
          printf("Aucune écurie sur la piste.");
      }
-     for(int i =0; i<(nbEcuries);i++){
-         if (strcmp(ecurie[i].nom, nom)==0) {
-             Ecuriez oneEcurie = ecurie[i];
+     for(int i =0; i<nbEcuries;i++){
+         Ecuriez oneEcurie = ecurie[i];
 
-             for (int j = i+1; j <nbPilotes; j++) {
-                 if (strcmp(ecurie[i].nom, pilotes[j].nom)==0) {
-                     for (int k = 0; k < sizeof(p); k++) {
-                         strcpy(p[k], pilotes[j].nom);
-                         pts[k] = pilotes[j].points;
-                     }
+         for (int j = i+1; j <nbPilotes; j++) {
+             if (strcmp(oneEcurie.nom, pilotes[j].nom)==0) {
+                 for (int k = 0; k < sizeof(p); k++) {
+                     strcpy(p[k], pilotes[j].nom);
+                     pts[k] = pilotes[j].points;
                  }
              }
-
-             if(oneEcurie.actif ==0){
-                 printf("[%d] %s (INACTIVE)\n\n", i + 1, oneEcurie.nom); //on numérote les écuries à partir
-                 //de 1 (i+1)
-                 continue;
-             }
-             printf("[%d] Nom : %s\n", i + 1, oneEcurie.nom);
-             printf("    Pays : %s\n",  oneEcurie.pays);
-             printf("    Année de création : %d\n", oneEcurie.anneeCreation);
-             printf("    Directeur : %s\n", oneEcurie.directeur);
-             printf("    Points : %d\n", oneEcurie.points);
-             printf("    Pilote 1 : %s (%d pts)\n", p[0], pts[0]);
-             printf("    Pilote 2 : %s (%d pts)\n", p[1], pts[1]);
-             printf("---------------------------------------\n");
          }
+
+         if(oneEcurie.actif ==0){
+             printf("[%d] %s (INACTIVE)\n\n", i + 1, oneEcurie.nom); //on numérote les écuries à partir
+             //de 1 (i+1)
+             continue;
+         }
+         printf("[%d] Nom : %s\n", i + 1, oneEcurie.nom);
+         printf("    Pays : %s\n",  oneEcurie.pays);
+         printf("    Année de création : %d\n", oneEcurie.anneeCreation);
+         printf("    Directeur : %s\n", oneEcurie.directeur);
+         printf("    Points : %d\n", oneEcurie.points);
+         printf("    Pilote 1 : %s (%d pts)\n", p[0], pts[0]);
+         printf("    Pilote 2 : %s (%d pts)\n", p[1], pts[1]);
+         printf("---------------------------------------\n");
      }
-}
+ }
+
 

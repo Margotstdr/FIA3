@@ -10,6 +10,7 @@
 // ... other function headers ...
 
 #include <stdio.h>
+#include <string.h>
 
 
 int main() {
@@ -60,14 +61,17 @@ int main() {
                         switch (choix) {
                             case 1:
                                 afficherPilote(pilotes, nbPilotes);
+                                break;
 
                             case 2:
                                 ajouterPilote(&pilotes,&nbPilotes, EC, nbEC);
+                                break;
 
                             case 3:
                                 printf("Entrez le nom du pilote à supprimer : ");
                                 scanf("%s", nom);
                                 supprimerPilote(&pilotes, &nbPilotes, nom);
+                                break;
 
                             case 4:
                                 retour = 1;
@@ -76,8 +80,16 @@ int main() {
                             case 5:
                                 run = 0;
                                 break;
+
+                            default:
+                                printf("Ce choix n'est pas valable.");
+                                break;
                         }
+                        if (retour == 1 || run == 0) break;
                     } while (choix < 1 || choix > 5);
+
+                    retour = 0;
+                    break;
 
                 case 2:
                     do {
@@ -92,15 +104,27 @@ int main() {
                         switch (choix) {
 
                             case 1:
-                                // Afficher liste ecurie
+                                afficherEcurie(EC, nbEC, pilotes, nbPilotes);
                                 break;
 
                             case 2:
-                                // Ajouter ecurie
+                                ajouterEcurie(&EC, &nbEC);
                                 break;
 
                             case 3:
-                                // supprimer ecurie
+                                int correct = 0;
+                                printf("Entrez le nom de l'écurie à supprimer : ");
+                                scanf("%s", nom);
+                                do {
+                                    for (int i = 0; i < nbEC; i++) {
+                                        if (strcmp(EC[i].nom,nom) == 0) {
+                                            correct = 1;
+                                            supprimerEcurie(&EC, &nbEC, nom, &pilotes, &nbPilotes);
+                                        } else {
+                                            printf("Ecurie non trouvée.");
+                                        }
+                                    }
+                                } while (!correct);
                                 break;
 
                             case 4:
@@ -110,8 +134,16 @@ int main() {
                             case 5:
                                 run = 0;
                                 break;
+
+                            default:
+                                printf("Ce choix n'est pas valable.");
+                                break;
                         }
+                        if (retour == 1 || run == 0) break;
                     } while (choix < 1 || choix > 5);
+
+                    retour = 0;
+                    break;
 
                 case 3:
                     do {
@@ -127,20 +159,33 @@ int main() {
 
                             case 1:
                                 afficherGrandPrix(GPs, nbGP);
+                                break;
 
                             case 2:
                                 ajouterGrandPrix(&GPs, &nbGP, pilotes, nbPilotes);
+                                break;
 
                             case 3:
                                 supprimerGrandPrix(&GPs, &nbGP);
+                                break;
 
                             case 4:
                                 retour = 1;
+                                break;
 
                             case 5:
                                 run = 0;
+                                break;
+
+                            default:
+                                printf("Ce choix n'est pas valable.");
+                                break;
                         }
+                        if (retour == 1 || run == 0) break;
                     } while (choix < 1 || choix > 5);
+
+                    retour = 0;
+                    break;
 
                 case 4:
                     do {
@@ -152,12 +197,49 @@ int main() {
                                "5. Quitter\n");
                         printf("Entrez le numéro qui correspond à ce que vous voulez faire : ");
                         scanf("%d", &choix);
+                        switch (choix) {
+
+                            case 1:
+                                //classement
+                                break;
+
+                            case 2:
+                                //classement
+                                break;
+
+                            case 3:
+                                //classement
+                                break;
+
+                            case 4:
+                                retour = 1;
+
+                            case 5:
+                                run = 0;
+
+                            default:
+                                printf("Ce choix n'est pas valable.");
+                                break;
+                        }
+                        if (retour == 1 || run == 0) break;
                     } while (choix < 1 || choix > 5);
+
+                    retour = 0;
+                    break;
 
                 case 5:
                     run = 0;
-            }
-        } while (choix < 1 || choix > 5);
+                    break;
+
+                default:
+                    printf("Ce choix n'est pas valable.");
+                    break;
+                    if (retour == 1 || run == 0) break;
+
+            } while (choix < 1 || choix > 5);
+
+            retour = 0;
+            break;
     } while (run == 1 || menu_choisi < 1 || menu_choisi > 5);
 
 }

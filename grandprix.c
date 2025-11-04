@@ -245,6 +245,13 @@ void ajouterResultatsCourse(GrandPrixz *GPs, int nbGP, char nom[], Pilotez *pilo
                 scanf("%s", resultats.tempsRealise);
 
 
+
+
+
+
+
+
+                ////// TRI A BULLE
                 resultats.position = 0;
                 resultats.pointsObtenus = 0;
 

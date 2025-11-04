@@ -22,7 +22,7 @@ typedef struct Ecurie Ecuriez;
 void ajouterEcurie(Ecuriez **ecuries, int *nbEcuries);  //nbEcuries le nombre d'écuries ecuries
 void majPointsEcurie(Ecuriez *ecurie, char nom[], Pilotez *pilotes, int nbPilotes);
 void supprimerEcurie (Ecuriez **ecuries, int *nbEcuries, char nom[], Pilotez **pilotes, int *nbPilotes);
-void afficherEcurie (Ecuriez *ecurie, int nbEcuries, Pilotez *pilotes, int nbPilotes, char nom[]);
+void afficherEcurie (Ecuriez *ecurie, int nbEcuries, Pilotez *pilotes, int nbPilotes);
 
 
 #endif //FIA3_ECURIES_H
