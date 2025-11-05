@@ -216,6 +216,43 @@ void supprimerGrandPrix(GrandPrixz **GPs, int *nbGP) {
         }
     } while (!found);
 }
+//fonction pour convertir le temps
+long convertirTemps(const char *tempsStr){
+    int h = 0, m = 0, s =0, ms =0;
+
+    //en fonction du format rentré on a plusieurs cas
+    //si on rentre le format h:mm:ss.sss
+    if (sscanf(tempsStr, "%d:%d:%d.%d", &h, &m, &s, &ms) == 4) {
+        return (long)h * 3600000L + (long)m * 60000L + (long)s * 1000L + (long)ms;
+    }
+        //si on rentre le format mm:ss.sss (si h est omis)
+    else if (sscanf(tempsStr, "%d:%d.%d", &m, &s, &ms) == 3) {
+        return (long)m * 60000L + (long)s * 1000L + (long)ms;
+    }
+        //si on rentre le format ss.sss (si h et m sont omis)
+    else if (sscanf(tempsStr, "%d.%d", &s, &ms) == 2) {
+        return (long)s * 1000L + (long)ms;
+    }
+    return -1; //si temps invalide
+}
+
+//fonction de tris à bulle pour les temps
+void triABulleResultats(ResultatsCourse *resultats, int nbResultats) {
+    int i, j;
+    ResultatsCourse temp; // Variable temporaire pour l'échange
+
+    for (i = 0; i < nbResultats - 1; i++) {
+        for (j = 0; j < nbResultats - i - 1; j++) {
+            // Comparaison : si le temps courant est plus lent (>), on échange.
+            if (resultats[j].tempsEnMs > resultats[j+1].tempsEnMs) {
+                // Échange des structures complètes
+                temp = resultats[j];
+                resultats[j] = resultats[j+1];
+                resultats[j+1] = temp;
+            }
+        }
+    }
+}
 
 
 //fonction finale ajouterResultatCourse
